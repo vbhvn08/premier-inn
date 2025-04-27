@@ -1,0 +1,96 @@
+{
+  "header": {
+    "home": "Home"
+  },
+  "booking": {
+    "pageTitle": "Request a group booking",
+    "description": "Planning a group event and need 10 or more rooms? Fill out the form below! Once we've received your request, our group booking team will be in touch.",
+    "continue": "Continue",
+    "cancelAndReturnHome": "< Cancel and return to home",
+    "contactDetailsTitle": "Contact details",
+    "bookingDetailsTitle": "Booking details",
+    "roomRequirementsTitle": "Room requirements",
+    "contactDetails": {
+      "title": "Your contact details",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Title *",
+      "titleOptions": {
+        "mr": "Mr",
+        "mrs": "Mrs",
+        "ms": "Ms",
+        "dr": "Dr"
+      },
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "First Name *",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Last Name *",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "Phone number *",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "Email Address *",
+      "continue": "Continue"
+    },
+    "bookingDetails": {
+      "title": "Booking details",
+      "continue": "Continue",
+      "bookerTypeTitle": "What type of booker are you?",
+      "bookerTypeOptions": {
+        "personal": "Personal",
+        "business": "Business",
+        "travelManagement": "Travel Management Company",
+        "travelAgent": "Travel Agent/Tour Operator"
+      },
+      "stayingForTitle": "Is your group staying for Business or Leisure?",
+      "stayingForOptions": {
+        "business": "Business",
+        "leisure": "Leisure"
+      },
+      "schoolGroupLabel": "Please tick this box if you are booking for a school or youth group.",
+      "reasonVisitTitle": "What is the reason for your group's visit?",
+      "reasonOptions": {
+        "placeholder": "Select a reason",
+        "leisure": "Leisure",
+        "business": "Business",
+        "wedding": "Wedding",
+        "event": "Event",
+        "other": "Other"
+      },
+      "hotelDetailsTitle": "Booking details",
+      "hotelDetailsDescription": "Our team will try to accommodate your group's preferences in terms of hotels and dates. If that's not possible, we'll do everything we can to offer the best alternatives.",
+      "hotelPlaceholder": "Enter a hotel",
+      "checkInOutPlaceholder": "Check In | Check Out",
+      "dateRangePlaceholder": "Check In | Check Out",
+      "checkIn": "Check-In",
+      "checkOut": "Check-Out",
+      "packageTypeTitle": "Package type",
+      "packageTypeDescription": "Subject to availability. Room only not available for group bookings.",
+      "packageTypeOptions": {
+        "breakfast": "Premier Inn Breakfast",
+        "mealDeal": "Meal deal (dinner, drink and breakfast)"
+      }
+    },
+    "roomRequirements": {
+      "title": "Rooms",
+      "submitRequest": "Submit request",
+      "roomsTitle": "Rooms",
+      "roomsDescription": "Select the maximum number of rooms required by room type and occupancy.",
+      "seeRoomTypes": "See room types",
+      "childrenStaying": "Travelling/staying with children (2-15 years).",
+      "accessibleNeeded": "Accessible room is needed.",
+      "singleOccupancy": "Single Occupancy",
+      "singleAdults": "1 adult",
+      "doubleOccupancy": "Double Occupancy",
+      "doubleAdults": "2 adults",
+      "twin": "Twin",
+      "twinAdults": "2 adults",
+      "totalRooms": "Total:",
+      "totalRoomsCount": "{count} rooms",
+      "additionalInfo": "Additional information (optional)",
+      "additionalInfoDesc": "Let us know if you have any additional information or special requests",
+      "additionalInfoPlaceholder": "Enter any additional requirements or special requests here",
+      "nightlyRequirements": "If you do not require the same number of rooms on each night of your stay, please state below the number and type of rooms required each night.",
+      "comments": "Comments",
+      "submitButton": "Submit request"
+    }
+  }
+}

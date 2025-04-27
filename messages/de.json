@@ -1,0 +1,103 @@
+{
+  "header": {
+    "home": "Startseite"
+  },
+  "booking": {
+    "pageTitle": "Gruppenreservierung anfragen",
+    "description": "Planen Sie eine Gruppenveranstaltung und benötigen 10 oder mehr Zimmer? Füllen Sie das untenstehende Formular aus! Sobald wir Ihre Anfrage erhalten haben, wird sich unser Team für Gruppenreservierungen mit Ihnen in Verbindung setzen.",
+    "continue": "Weiter",
+    "cancelAndReturnHome": "< Abbrechen und zur Startseite zurückkehren",
+    "contactDetailsTitle": "Kontaktdaten",
+    "bookingDetailsTitle": "Buchungsdetails",
+    "roomRequirementsTitle": "Zimmeranforderungen",
+    "contactDetails": {
+      "title": "Ihre Kontaktdaten",
+      "titleLabel": "Anrede",
+      "titlePlaceholder": "Wählen Sie eine Anrede",
+      "titleOptions": {
+        "mr": "Herr",
+        "mrs": "Frau",
+        "ms": "Frau",
+        "dr": "Dr."
+      },
+      "firstNameLabel": "Vorname",
+      "firstNamePlaceholder": "Geben Sie Ihren Vornamen ein",
+      "lastNameLabel": "Nachname",
+      "lastNamePlaceholder": "Geben Sie Ihren Nachnamen ein",
+      "phoneLabel": "Telefonnummer",
+      "phonePlaceholder": "Geben Sie Ihre Telefonnummer ein",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "Geben Sie Ihre E-Mail-Adresse ein",
+      "continue": "Weiter"
+    },
+    "bookingDetails": {
+      "title": "Buchungsdetails",
+      "continue": "Weiter",
+      "bookerTypeTitle": "Welche Art von Bucher sind Sie?",
+      "bookerTypeOptions": {
+        "personal": "Privat",
+        "business": "Geschäftlich",
+        "travelManagement": "Reisemanagement-Unternehmen",
+        "travelAgent": "Reisebüro/Reiseveranstalter"
+      },
+      "stayingForTitle": "Ist Ihre Gruppe geschäftlich oder privat unterwegs?",
+      "stayingForOptions": {
+        "business": "Geschäftlich",
+        "leisure": "Privat"
+      },
+      "schoolGroupLabel": "Bitte kreuzen Sie dieses Kästchen an, wenn Sie für eine Schul- oder Jugendgruppe buchen.",
+      "reasonVisitTitle": "Was ist der Grund für den Besuch Ihrer Gruppe?",
+      "reasonOptions": {
+        "placeholder": "Wählen Sie einen Grund",
+        "leisure": "Freizeit",
+        "business": "Geschäftlich",
+        "wedding": "Hochzeit",
+        "event": "Veranstaltung",
+        "other": "Sonstiges"
+      },
+      "hotelDetailsTitle": "Buchungsdetails",
+      "hotelDetailsDescription": "Unser Team wird versuchen, die Präferenzen Ihrer Gruppe in Bezug auf Hotels und Termine zu berücksichtigen. Sollte das nicht möglich sein, werden wir alles tun, um die besten Alternativen anzubieten.",
+      "hotelPlaceholder": "Hotel eingeben",
+      "checkInOutPlaceholder": "Check-In | Check-Out",
+      "dateRangePlaceholder": "Check-In- und Check-Out-Daten wählen",
+      "checkIn": "Check-In",
+      "checkOut": "Check-Out",
+      "packageTypeTitle": "Pakettyp",
+      "packageTypeDescription": "Je nach Verfügbarkeit. Nur Zimmer ist für Gruppenbuchungen nicht verfügbar.",
+      "packageTypeOptions": {
+        "breakfast": "Premier Inn Frühstück",
+        "mealDeal": "Mahlzeiten-Angebot (Abendessen, Getränk und Frühstück)"
+      }
+    },
+    "roomRequirements": {
+      "title": "Zimmeranforderungen",
+      "submitRequest": "Anfrage senden",
+      "roomsTitle": "Zimmer",
+      "roomsDescription": "Wählen Sie die maximale Anzahl der benötigten Zimmer nach Zimmertyp und Belegung.",
+      "seeRoomTypes": "Zimmertypen anzeigen",
+      "childrenStaying": "Reisen/Übernachtung mit Kindern (2-15 Jahre).",
+      "accessibleNeeded": "Barrierefreies Zimmer wird benötigt.",
+      "singleOccupancy": "Einzelbelegung",
+      "singleAdults": "1 Erwachsener",
+      "doubleOccupancy": "Doppelbelegung",
+      "doubleAdults": "2 Erwachsene",
+      "twin": "Twin",
+      "twinAdults": "2 Erwachsene",
+      "totalRooms": "Gesamt:",
+      "totalRoomsCount": "{count} Zimmer",
+      "additionalInfo": "Zusätzliche Informationen (optional)",
+      "additionalInfoDesc": "Teilen Sie uns mit, wenn Sie zusätzliche Informationen oder besondere Wünsche haben",
+      "additionalInfoPlaceholder": "Geben Sie hier zusätzliche Anforderungen oder besondere Wünsche ein",
+      "nightlyRequirements": "Falls Sie nicht die gleiche Anzahl an Zimmern für jede Nacht Ihres Aufenthalts benötigen, geben Sie bitte die Anzahl und den Typ der Zimmer für jede Nacht an.",
+      "comments": "Kommentare",
+      "submitButton": "Anfrage senden",
+      "roomTypeLabel": "Zimmertyp",
+      "roomTypePlaceholder": "Wählen Sie einen Zimmertyp",
+      "roomTypeOptions": {
+        "standard": "Standard",
+        "deluxe": "Deluxe",
+        "suite": "Suite"
+      }
+    }
+  }
+}
