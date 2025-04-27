@@ -61,14 +61,32 @@ export async function POST(request: Request) {
     }
 
     if (Object.keys(errors).length > 0) {
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate server-side delay
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate server-side delay
       return NextResponse.json({ success: false, errors }, { status: 400 });
     }
 
-    // Proceed with booking logic (e.g., save to database)
+    // Generate a reference number
+    const referenceNumber =
+      'CAS-' + Math.floor(100000 + Math.random() * 900000);
+
+    // Extract required information from form data
+    const { email, firstName, lastName } = body.contactDetails || {};
+
+    // Build URL parameters for the success page
+    const params = new URLSearchParams();
+    params.append('ref', referenceNumber);
+    if (email) params.append('email', email);
+    if (firstName) params.append('firstName', firstName);
+    if (lastName) params.append('lastName', lastName);
+
+    // Save the booking data to database or external service here
+    // [Database saving logic would go here]
+
+    // return success with redirect URL
     return NextResponse.json({
       success: true,
       message: 'Booking submitted successfully.',
+      redirectUrl: `/success?${params.toString()}`,
     });
   } catch (error) {
     console.error('Error processing booking form:', error);

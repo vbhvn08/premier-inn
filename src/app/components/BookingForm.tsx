@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, FormProvider, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import ContactDetailsForm from './ContactDetailsForm';
 import BookingDetailsForm from './BookingDetailsForm';
 import RoomRequirementsForm from './RoomRequirementsForm';
@@ -12,6 +13,8 @@ import { useTranslations } from 'next-intl';
 
 export default function GroupBookingForm() {
   const t = useTranslations('booking');
+  const router = useRouter();
+
   // Initialize form with react-hook-form
   const methods = useForm<BookingForm>({
     resolver: zodResolver(bookingFormSchema) as Resolver<BookingForm>,
@@ -62,7 +65,6 @@ export default function GroupBookingForm() {
 
   // Navigate to next section after validation
   const handleContinue = (currentSection: FormSectionKey) => {
-    console.log('formData: ', formData);
     if (currentSection === 'contactDetails') {
       toggleSection('bookingDetails');
     } else if (currentSection === 'bookingDetails') {
@@ -128,19 +130,14 @@ export default function GroupBookingForm() {
             result.message || 'Failed to submit form. Please try again.',
           );
         }
-        return;
-      }
+      } else if (result.success && result.redirectUrl) {
+        // Handle successful submission with client-side redirect
+        router.push(result.redirectUrl);
 
-      // Handle successful submission
-      window.alert('Booking submitted successfully!');
-      methods.reset();
-      setFormData({});
-      // Reset form sections
-      setOpenSections({
-        contactDetails: true,
-        bookingDetails: false,
-        roomRequirements: false,
-      });
+        // Reset form
+        methods.reset();
+        setFormData({});
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmissionError('An unexpected error occurred. Please try again.');

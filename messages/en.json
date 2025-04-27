@@ -91,6 +91,13 @@
       "nightlyRequirements": "If you do not require the same number of rooms on each night of your stay, please state below the number and type of rooms required each night.",
       "comments": "Comments",
       "submitButton": "Submit request"
+    },
+    "success": {
+      "title": "Thanks for your request,",
+      "caseNumber": "Your case number is:",
+      "emailSent": "A confirmation email has been sent to",
+      "responseTime": "We've received your request and aim to get in touch within the next 72 hours.",
+      "backToHomepage": "Back to homepage"
     }
   }
 }

@@ -2,6 +2,21 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import GroupBookingForm from '../../src/app/components/BookingForm';
 
+// Create a mock router with jest.fn() for push method
+const mockRouterPush = jest.fn();
+
+// Mock Next.js router
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: mockRouterPush,
+  }),
+}));
+
+// Mock next-intl translations
+jest.mock('next-intl', () => ({
+  useTranslations: () => (key) => key,
+}));
+
 // Mock zod resolver to avoid validation issues in tests
 jest.mock('@hookform/resolvers/zod', () => ({
   zodResolver: () => () => ({
@@ -105,6 +120,8 @@ describe('GroupBookingForm', () => {
   beforeEach(() => {
     // Mock fetch implementation for each test
     global.fetch = jest.fn();
+    // Reset router push mock
+    mockRouterPush.mockReset();
   });
 
   test('renders the form with ContactDetails section open by default', () => {
@@ -182,14 +199,14 @@ describe('GroupBookingForm', () => {
   });
 
   test('handles form submission', async () => {
-    // Mock successful form submission
+    // Mock successful form submission with redirectUrl
     (global.fetch as jest.Mock).mockResolvedValueOnce({
       ok: true,
-      json: async () => ({ success: true }),
+      json: async () => ({
+        success: true,
+        redirectUrl: '/success?ref=CAS-123456&email=test%40example.com',
+      }),
     });
-
-    // Mock window.alert
-    const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
     render(<GroupBookingForm />);
 
@@ -215,11 +232,11 @@ describe('GroupBookingForm', () => {
         }),
       );
 
-      // Check if alert was shown for successful submission
-      expect(mockAlert).toHaveBeenCalledWith('Booking submitted successfully!');
+      // Check if router.push was called with the redirect URL
+      expect(mockRouterPush).toHaveBeenCalledWith(
+        '/success?ref=CAS-123456&email=test%40example.com',
+      );
     });
-
-    mockAlert.mockRestore();
   });
 
   test('handles server errors during form submission', async () => {

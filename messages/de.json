@@ -98,6 +98,13 @@
         "deluxe": "Deluxe",
         "suite": "Suite"
       }
+    },
+    "success": {
+      "title": "Vielen Dank für Ihre Anfrage, aq",
+      "caseNumber": "Ihre Fallnummer lautet:",
+      "emailSent": "Eine Bestätigungs-E-Mail wurde gesendet an",
+      "responseTime": "Wir haben Ihre Anfrage erhalten und werden uns innerhalb der nächsten 72 Stunden mit Ihnen in Verbindung setzen.",
+      "backToHomepage": "Zurück zur Startseite"
     }
   }
 }
