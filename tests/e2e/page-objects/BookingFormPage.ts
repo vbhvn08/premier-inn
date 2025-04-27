@@ -316,44 +316,8 @@ export class BookingFormPage {
       const dateInputs = this.page.locator(
         'input[type="date"], input[placeholder*="date" i], input[placeholder*="check" i]',
       );
-      const count = await dateInputs.count();
 
-      if (count >= 2) {
-        // If we have two date inputs, fill them separately
-        await dateInputs.nth(0).fill(checkInDate);
-        await dateInputs.nth(1).fill(checkOutDate);
-      } else if (count === 1) {
-        // If we only have one input, it might be a date range picker
-        await dateInputs.first().fill(`${checkInDate} - ${checkOutDate}`);
-      } else {
-        // If no date inputs found through standard methods, try a direct JavaScript approach
-        await this.page.evaluate(
-          (checkIn, checkOut) => {
-            // This will set values directly in the DOM for any date-like inputs
-            const inputs = document.querySelectorAll('input');
-            let dateInputsFound = 0;
-
-            for (const input of inputs) {
-              if (
-                input.type === 'date' ||
-                input.placeholder?.toLowerCase().includes('date') ||
-                input.placeholder?.toLowerCase().includes('check-in') ||
-                input.placeholder?.toLowerCase().includes('check-out') ||
-                input.id?.toLowerCase().includes('date')
-              ) {
-                if (dateInputsFound === 0) {
-                  (input as HTMLInputElement).value = checkIn;
-                } else if (dateInputsFound === 1) {
-                  (input as HTMLInputElement).value = checkOut;
-                }
-                dateInputsFound++;
-              }
-            }
-          },
-          checkInDate,
-          checkOutDate,
-        );
-      }
+      await dateInputs.first().fill(`${checkInDate} - ${checkOutDate}`);
     } catch (e) {
       console.log('Date input failed, continuing:', e);
     }
@@ -376,7 +340,7 @@ export class BookingFormPage {
           await this.page.waitForTimeout(1000);
         }
       }
-    } catch (e) {
+    } catch (error) {
       console.log(
         'Failed to click booking details continue button, trying alternative approach',
       );
@@ -399,48 +363,32 @@ export class BookingFormPage {
     singleRooms: number,
     doubleRooms: number,
     twinRooms: number,
-    additionalInfo: string = '',
+    additionalInfo?: string,
   ) {
-    // Use a more reliable approach by checking if each element exists before interacting
-    try {
-      if ((await this.singleOccupancyRoomsInput.count()) > 0) {
-        await this.singleOccupancyRoomsInput.fill(singleRooms.toString());
-      }
+    // Fill in room counts if elements exist
+    if ((await this.singleOccupancyRoomsInput.count()) > 0) {
+      await this.singleOccupancyRoomsInput.fill(singleRooms.toString());
+    }
 
-      if ((await this.doubleOccupancyRoomsInput.count()) > 0) {
-        await this.doubleOccupancyRoomsInput.fill(doubleRooms.toString());
-      }
+    if ((await this.doubleOccupancyRoomsInput.count()) > 0) {
+      await this.doubleOccupancyRoomsInput.fill(doubleRooms.toString());
+    }
 
-      if ((await this.twinRoomsInput.count()) > 0) {
-        await this.twinRoomsInput.fill(twinRooms.toString());
-      }
+    if ((await this.twinRoomsInput.count()) > 0) {
+      await this.twinRoomsInput.fill(twinRooms.toString());
+    }
 
-      if (additionalInfo && (await this.additionalInfoTextarea.count()) > 0) {
-        await this.additionalInfoTextarea.fill(additionalInfo);
-      }
-    } catch (e) {
-      console.log(
-        'Failed to fill room requirements, trying alternative approach',
-      );
+    // Check accessible room checkbox if needed (randomly for this test)
+    if (
+      (await this.accessibleRoomCheckbox.count()) > 0 &&
+      Math.random() > 0.5
+    ) {
+      await this.accessibleRoomCheckbox.check();
+    }
 
-      // Try to fill any numeric inputs we can find
-      const numericInputs = await this.page
-        .locator('input[type="number"], input:not([type])')
-        .all();
-      if (numericInputs.length >= 1)
-        await numericInputs[0].fill(singleRooms.toString());
-      if (numericInputs.length >= 2)
-        await numericInputs[1].fill(doubleRooms.toString());
-      if (numericInputs.length >= 3)
-        await numericInputs[2].fill(twinRooms.toString());
-
-      // Try to fill any textarea we can find
-      if (additionalInfo) {
-        const textarea = this.page.locator('textarea').first();
-        if ((await textarea.count()) > 0) {
-          await textarea.fill(additionalInfo);
-        }
-      }
+    // Fill additional info if provided and element exists
+    if (additionalInfo && (await this.additionalInfoTextarea.count()) > 0) {
+      await this.additionalInfoTextarea.fill(additionalInfo);
     }
   }
 
@@ -449,28 +397,31 @@ export class BookingFormPage {
     try {
       if ((await this.submitButton.count()) > 0) {
         await this.submitButton.click();
-        await this.page.waitForTimeout(2000); // Wait longer for form submission
+        await this.page.waitForTimeout(2000); // Wait for form submission response
       } else {
         // If specific button not found, try to find any button that might submit the form
-        const anyButton = this.page
+        const anySubmitButton = this.page
           .getByRole('button')
           .filter({ hasText: /submit|book|reserve/i })
           .first();
-        if ((await anyButton.count()) > 0) {
-          await anyButton.click();
+        if ((await anySubmitButton.count()) > 0) {
+          await anySubmitButton.click();
           await this.page.waitForTimeout(2000);
-        } else {
-          // Last resort - try any button at the end of the form
-          const buttons = this.page.locator('button');
-          const count = await buttons.count();
-          if (count > 0) {
-            await buttons.nth(count - 1).click();
-            await this.page.waitForTimeout(2000);
-          }
         }
       }
-    } catch (e) {
-      console.log('Failed to submit booking form:', e);
+    } catch (error) {
+      console.log('Failed to click submit button, trying alternative approach');
+
+      // Alternative approach - look for any button that might be a submit button
+      const buttons = await this.page.locator('button').all();
+      for (const button of buttons) {
+        const text = await button.textContent();
+        if (text && /submit|book|reserve/i.test(text)) {
+          await button.click();
+          await this.page.waitForTimeout(2000);
+          break;
+        }
+      }
     }
   }
 
@@ -526,227 +477,14 @@ export class BookingFormPage {
 
   // Assertions - simplified to check for basic content instead of specific elements
   async expectContactDetailsSectionVisible() {
-    // Check for specific content related to contact details with a more targeted selector
-    await expect(
-      this.page
-        .locator('h3.form-section-title')
-        .filter({ hasText: /contact|details/i })
-        .first(),
-    )
-      .toBeVisible({ timeout: 5000 })
-      .catch(async () => {
-        // Fallback to a more specific approach to avoid strict mode violations
-        const isVisible = await this.page.evaluate(() => {
-          const elements = document.querySelectorAll('h2, h3, div');
-          for (const el of elements) {
-            const text = el.textContent?.toLowerCase() || '';
-            if (
-              text.includes('contact') &&
-              (text.includes('details') ||
-                text.includes('name') ||
-                text.includes('email') ||
-                text.includes('phone'))
-            ) {
-              const style = window.getComputedStyle(el);
-              return style.display !== 'none' && style.visibility !== 'hidden';
-            }
-          }
-          return false;
-        });
-        expect(isVisible).toBe(
-          true,
-          'Contact details section should be visible',
-        );
-      });
+    await expect(this.contactDetailsSection).toBeVisible({ timeout: 5000 });
   }
 
   async expectBookingDetailsSectionVisible() {
-    // Check for specific content related to booking details with a more targeted selector
-    await expect(
-      this.page
-        .locator('h3.form-section-title')
-        .filter({ hasText: /booking|details/i })
-        .first(),
-    )
-      .toBeVisible({ timeout: 5000 })
-      .catch(async () => {
-        // Fallback to a more specific approach to avoid strict mode violations
-        const isVisible = await this.page.evaluate(() => {
-          const elements = document.querySelectorAll('h2, h3, div');
-          for (const el of elements) {
-            const text = el.textContent?.toLowerCase() || '';
-            if (
-              text.includes('booking') &&
-              (text.includes('details') ||
-                text.includes('hotel') ||
-                text.includes('date') ||
-                text.includes('check'))
-            ) {
-              const style = window.getComputedStyle(el);
-              return style.display !== 'none' && style.visibility !== 'hidden';
-            }
-          }
-          return false;
-        });
-        expect(isVisible).toBe(
-          true,
-          'Booking details section should be visible',
-        );
-      });
+    await expect(this.bookingDetailsSection).toBeVisible({ timeout: 5000 });
   }
 
   async expectRoomRequirementsSectionVisible() {
-    // Check for specific content related to room requirements with a more targeted selector
-    await expect(
-      this.page
-        .locator('h3.form-section-title')
-        .filter({ hasText: /room|requirements/i })
-        .first(),
-    )
-      .toBeVisible({ timeout: 5000 })
-      .catch(async () => {
-        // Fallback to a more specific approach to avoid strict mode violations
-        const isVisible = await this.page.evaluate(() => {
-          const elements = document.querySelectorAll('h2, h3, div');
-          for (const el of elements) {
-            const text = el.textContent?.toLowerCase() || '';
-            if (
-              (text.includes('room') || text.includes('requirements')) &&
-              (text.includes('single') ||
-                text.includes('double') ||
-                text.includes('twin') ||
-                text.includes('occupancy'))
-            ) {
-              const style = window.getComputedStyle(el);
-              return style.display !== 'none' && style.visibility !== 'hidden';
-            }
-          }
-          return false;
-        });
-        expect(isVisible).toBe(
-          true,
-          'Room requirements section should be visible',
-        );
-      });
-  }
-
-  async expectFormErrorsVisible() {
-    // Check for any error indication
-    const hasVisibleError = await this.page.evaluate(() => {
-      // Look for error messages
-      const errorTexts = document.querySelectorAll('*');
-      for (const el of errorTexts) {
-        const text = el.textContent?.toLowerCase() || '';
-        const classes = el.className?.toLowerCase() || '';
-        const isVisible = el.offsetParent !== null;
-
-        if (
-          isVisible &&
-          (text.includes('error') ||
-            text.includes('invalid') ||
-            text.includes('required') ||
-            classes.includes('error'))
-        ) {
-          return true;
-        }
-      }
-
-      // Check for invalid form elements
-      const invalidInputs = document.querySelectorAll(
-        'input:invalid, select:invalid',
-      );
-      return invalidInputs.length > 0;
-    });
-
-    expect(hasVisibleError).toBe(true);
-  }
-
-  async expectSubmissionErrorVisible() {
-    // Check for any submission error indication
-    const hasSubmissionError = await this.page.evaluate(() => {
-      // Look for error messages related to submission
-      const errorTexts = document.querySelectorAll('*');
-      for (const el of errorTexts) {
-        const text = el.textContent?.toLowerCase() || '';
-        const isVisible = el.offsetParent !== null;
-
-        if (
-          isVisible &&
-          (text.includes('error') ||
-            text.includes('failed') ||
-            text.includes('invalid') ||
-            text.includes('unable to submit'))
-        ) {
-          return true;
-        }
-      }
-
-      return false;
-    });
-
-    expect(hasSubmissionError).toBeTruthy(
-      'Expected to find visible submission error',
-    );
-  }
-
-  async expectSuccessMessage() {
-    // Check for any success indication including alerts, text or form clearing
-    await this.page.waitForTimeout(1000);
-
-    const hasSuccessIndication = await this.page.evaluate(() => {
-      // Check for success messages in text
-      const successTexts = document.querySelectorAll('*');
-      for (const el of successTexts) {
-        const text = el.textContent?.toLowerCase() || '';
-        const isVisible = el.offsetParent !== null;
-
-        if (
-          isVisible &&
-          (text.includes('success') ||
-            text.includes('thank you') ||
-            text.includes('confirmed') ||
-            text.includes('submitted') ||
-            text.includes('received'))
-        ) {
-          return true;
-        }
-      }
-
-      // Check if the form was cleared/reset
-      const forms = document.querySelectorAll('form');
-      for (const form of forms) {
-        const inputs = form.querySelectorAll(
-          'input:not([type="hidden"]):not([type="button"]):not([type="submit"])',
-        );
-        let allEmpty = true;
-
-        for (const input of inputs) {
-          if ((input as HTMLInputElement).value !== '') {
-            allEmpty = false;
-            break;
-          }
-        }
-
-        if (allEmpty && inputs.length > 0) {
-          return true;
-        }
-      }
-
-      return false;
-    });
-
-    // For tests, allow both success messages and lack of errors to pass
-    if (!hasSuccessIndication) {
-      // If no explicit success indication, at least verify there are no errors
-      const hasErrors = await this.page.evaluate(() => {
-        return (
-          document.querySelector(
-            '.error, .error-message, [data-testid*="error"]',
-          ) !== null
-        );
-      });
-
-      expect(hasErrors).toBeFalsy('Expected no errors after submission');
-    }
+    await expect(this.roomRequirementsSection).toBeVisible({ timeout: 5000 });
   }
 }
