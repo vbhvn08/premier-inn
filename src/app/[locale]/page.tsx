@@ -1,11 +1,21 @@
-'use client';
-
 import GroupBookingForm from '../components/BookingForm';
 import Header from '../components/Header';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 
-export default function Home() {
-  const t = useTranslations('booking');
+// Metadata for the page
+export const metadata = {
+  title: 'Premier Inn Group Booking',
+  description: 'Book accommodations for groups at Premier Inn hotels',
+};
+
+// Generate static params at build time for most common locales
+export async function generateStaticParams() {
+  return [{ locale: 'en' }, { locale: 'de' }];
+}
+
+export default async function Home() {
+  // Use server-side translations
+  const t = await getTranslations('booking');
 
   return (
     <main>
