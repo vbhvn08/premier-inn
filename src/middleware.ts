@@ -7,13 +7,13 @@ const intlMiddleware = createMiddleware(routing);
 
 // Main middleware that combines i18n and adds cache headers
 export default async function middleware(request: NextRequest) {
+  // Skip internationalization for API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
+    return;
+  }
+
   // Get the response from the i18n middleware
   const response = await intlMiddleware(request);
-
-  // Skip adding cache headers for API routes
-  if (request.nextUrl.pathname.startsWith('/api/')) {
-    return response;
-  }
 
   // Add cache control headers for static assets
   if (
@@ -46,7 +46,7 @@ export default async function middleware(request: NextRequest) {
 
 export const config = {
   // Match all pathnames except for
-  // - … if they start with `/trpc`, `/_next` or `/_vercel`
-  // Note: We've removed 'api' from the exclusions to allow adding cache headers to API responses
-  matcher: '/((?!trpc|_next|_vercel|.*\\..*).*)',
+  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
+  // - … if they end with a file extension like .jpg
+  matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
 };
