@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ContactDetailsFormProps } from '../types';
+import { ContactDetailsFormProps, Country } from '../types';
 import {
   ContactDetails,
   contactDetailsSchema,
@@ -16,6 +16,33 @@ export default function ContactDetailsForm({
   onContinue,
 }: ContactDetailsFormProps) {
   const t = useTranslations('booking.contactDetails');
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch countries from API
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await fetch('/api/countries');
+        if (!response.ok) {
+          throw new Error('Failed to fetch countries');
+        }
+        const data = await response.json();
+        // Extract countries array from the response and filter only those with dialingCode
+        const countriesWithDialingCode =
+          data?.data?.countries?.countries.filter(
+            (country: Country) => country.dialingCode,
+          ) || [];
+        setCountries(countriesWithDialingCode);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      } finally {
+      }
+    };
+
+    fetchCountries();
+  }, []);
 
   const {
     register,
@@ -89,7 +116,23 @@ export default function ContactDetailsForm({
 
         <div className='form-group'>
           <div className='phone-input'>
-            <span className='country-code'>+44</span>
+            <select
+              id='countryCode'
+              {...register('countryCode')}
+              className={`country-code ${errors.countryCode ? 'error' : ''}`}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <option value='+44'>+44</option>
+              ) : (
+                countries.map((country, index) => (
+                  <option key={index} value={country.dialingCode}>
+                    {country.dialingCode}{' '}
+                    {country.countryName ? `(${country.countryName})` : ''}
+                  </option>
+                ))
+              )}
+            </select>
             <input
               type='tel'
               id='phone'
@@ -98,6 +141,9 @@ export default function ContactDetailsForm({
               className={`${errors.phone ? 'error' : ''}`}
             />
           </div>
+          {errors.countryCode && (
+            <span className='error-message'>{errors.countryCode.message}</span>
+          )}
           {errors.phone && (
             <span className='error-message'>{errors.phone.message}</span>
           )}

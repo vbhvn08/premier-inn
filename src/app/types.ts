@@ -19,6 +19,13 @@ export interface ContactDetailsFormProps {
   onContinue?: () => void; // Added for section navigation
 }
 
+export interface Country {
+  countryCode?: string;
+  countryName?: string;
+  dialingCode?: string;
+  nationality: string;
+}
+
 // Booking Details Types
 
 export interface BookingDetailsFormProps {

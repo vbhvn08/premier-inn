@@ -139,6 +139,7 @@ h1 {
   border-right: 1px solid #d1d5db;
   color: #333;
   font-size: 1rem;
+  max-width: 10rem;
   display: flex;
   align-items: center;
 }

@@ -11,6 +11,7 @@ export const contactDetailsSchema = z.object({
     .string()
     .nonempty({ message: 'Last name is required' })
     .min(2, { message: 'Last name must be at least 2 characters' }),
+  countryCode: z.string().nonempty({ message: 'Country code is required' }),
   phone: z
     .string()
     .nonempty({ message: 'Phone number is required' })
